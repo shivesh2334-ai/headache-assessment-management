@@ -8,7 +8,7 @@
 :root[data-theme="dark"]{--bg:#16151a;--card:#202027;--tx:#ecebe6;--mu:#a3a29b;--bd:#37363f;--ac:#b794dd;--rd:#ff8a80;--rb:#3a1f1d;--gn:#7fd1a1;--gb:#17301f;--am:#f2c14e;--ab:#352a10;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:720px;margin:0 auto;padding:14px 14px 60px}
+main{max-width:1000px;margin:0 auto;padding:14px 14px 60px}
 h1{font-size:20px;margin:6px 0 2px}h2{font-size:16px;margin:0 0 8px;color:var(--ac)}h3{font-size:14px;margin:12px 0 4px}
 .sub{color:var(--mu);font-size:13px;margin:0 0 12px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:0 0 12px}
@@ -26,10 +26,17 @@ ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
 .tabs{display:flex;gap:6px;margin:0 0 12px}.tabs span{flex:1;text-align:center;padding:7px 2px;border-radius:8px;background:var(--bd);font-size:12px;color:var(--mu)}.tabs span.on{background:var(--ac);color:#fff}
 .ft{font-size:12px;color:var(--mu)}
 .hid{display:none}
+
+*{box-sizing:border-box}a{color:var(--ac)}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
+nav.modules{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}nav.modules button{width:auto;flex:1 1 130px;background:var(--card);color:var(--ac);border:1px solid var(--bd)}nav.modules button[aria-pressed=true]{background:var(--ac);color:white}
+input[type=search]{width:100%;font:inherit;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}.kb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}.kb-grid .card{margin:0}summary{cursor:pointer;color:var(--ac);font-weight:600;padding:8px 0}.kb-list p{margin:6px 0 12px}.kb-list h3{margin-top:12px}.kb-list a{display:inline-block;margin-right:10px}.toolbar{display:flex;gap:8px;margin:12px 0;align-items:end}.toolbar>div{flex:1}.toolbar button{width:auto}.ft{line-height:1.6}
+@media(max-width:550px){.toolbar{flex-wrap:wrap}.toolbar>div{min-width:100%}}@media print{nav,.toolbar,#kbQuery{display:none}.card{break-inside:avoid}}
 </style></head><body><main>
 <h1>Headache Assessment & Management</h1>
 <p class="sub">Clinical decision support based on Harrison's Ch. 16 (Goadsby) with updated guideline points (AHS 2024, ICHD-3). For clinician use; not a substitute for judgement.</p>
-<div class="tabs"><span id="t1" class="on">1 Red flags</span><span id="t2">2 History</span><span id="t3">3 Result</span></div>
+<nav class="modules" aria-label="Application sections"><button type="button" data-view="assess" aria-pressed="true">Assessment</button><button type="button" data-view="types" aria-pressed="false">Headache types</button><button type="button" data-view="treatment" aria-pressed="false">Treatment</button><button type="button" data-view="knowledge" aria-pressed="false">Knowledge base</button></nav>
+<div class="card"><label for="kbQuery"><b>Search headaches, symptoms and treatments</b></label><input id="kbQuery" type="search" placeholder="e.g. cluster oxygen, aura, indomethacin" autocomplete="off"><p class="ft">Search the curated reference library. Multiple words narrow results; this search does not diagnose a patient.</p></div>
+<div id="assessmentView"><div class="tabs"><span id="t1" class="on">1 Red flags</span><span id="t2">2 History</span><span id="t3">3 Result</span></div>
 
 <section id="s1">
 <div class="card"><h2>Red flags (Harrison Table 16-2)</h2>
@@ -39,13 +46,13 @@ ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
 
 <section id="s2" class="hid">
 <div class="card"><h2>Pattern</h2><div class="row">
-<div><p class="fl">Headache days / month</p><input type="number" id="days" min="0" max="31" value="4"></div>
-<div><p class="fl">Typical attack duration</p><select id="dur"><option value="s">&lt; 3 hours (15-180 min)</option><option value="m" selected>4-72 hours</option><option value="l">&gt; 72 h / continuous</option></select></div>
-<div><p class="fl">Age</p><input type="number" id="age" value="35"></div></div>
+<div><p class="fl">Headache days / month</p><input type="number" aria-label="Headache days per month" id="days" min="0" max="31" value="4"></div>
+<div><p class="fl">Typical attack duration</p><select aria-label="Typical attack duration" id="dur"><option value="brief">Seconds / minutes (under 15 min)</option><option value="s">15–180 minutes</option><option value="other">Other / uncertain duration</option><option value="m" selected>4-72 hours</option><option value="l">&gt; 72 h / continuous</option></select></div>
+<div><p class="fl">Age</p><input type="number" aria-label="Adult age in years" id="age" value="35"></div></div>
 <div class="row" style="margin-top:10px">
-<div><p class="fl">Acute analgesic / NSAID days per month</p><input type="number" id="an" min="0" max="31" value="2"></div>
-<div><p class="fl">Triptan / opioid / combination days per month</p><input type="number" id="tr" min="0" max="31" value="0"></div></div></div>
-<div class="card"><h2>Features</h2><div id="ft"></div></div>
+<div><p class="fl">Acute analgesic / NSAID days per month</p><input type="number" aria-label="Simple analgesic or NSAID days per month" id="an" min="0" max="31" value="2"></div>
+<div><p class="fl">Triptan / opioid / combination days per month</p><input type="number" aria-label="Triptan opioid or combination days per month" id="tr" min="0" max="31" value="0"></div></div></div>
+<div class="card"><h2>Duration of pattern</h2><div class="row"><div><label for="months">Months at current headache/medication pattern</label><input id="months" type="number" min="0" max="1200" value="1"></div><div><label for="migdays">Migraine-feature days / month</label><input id="migdays" type="number" min="0" max="31" value="0"></div></div></div><div class="card"><h2>Features</h2><div id="ft"></div></div>
 <div class="card"><h2>Context</h2><div id="cx"></div></div>
 <button onclick="calc()">Generate assessment</button>
 <button class="g" onclick="go(1)">Back</button>
@@ -55,19 +62,27 @@ ul{margin:4px 0 4px 18px;padding:0}li{margin:3px 0}
 <button class="g" onclick="go(2)">Edit history</button>
 <button class="g" onclick="reset()">New patient</button></section>
 
-<p class="ft" style="margin-top:20px"><b>Sources:</b> Harrison's Principles of Internal Medicine, Ch. 16 Headache (Goadsby); ICHD-3 (Cephalalgia 2018); AHS position statement, CGRP-targeting therapies as a first-line option for migraine prevention (Headache, Mar 2024); AHS consensus statement 2021 (acute and preventive therapy). Doses are typical adult doses; verify against current labels, local formulary and patient factors. Pregnancy, renal/hepatic disease and drug interactions are not modelled.</p>
+</div>
+<section id="libraryView" hidden aria-labelledby="libraryTitle"><h2 id="libraryTitle" tabindex="-1">Headache types</h2><p id="libraryIntro" class="sub"></p><div class="al amb">Adult clinician reference. Exclude secondary causes before treating a primary headache. Doses are illustrative single adult doses, not complete prescriptions. Check allergy, pregnancy, comorbidity, interactions, repeat-dose limits and local product labels.</div><div class="toolbar"><div><label for="kbGroup">Category</label><select id="kbGroup"><option value="">All categories</option><option>Migraine</option><option>Tension-type</option><option>TACs</option><option>Other primary</option><option>Secondary / urgent</option></select></div><button id="clearSearch" class="g" type="button">Clear filters</button></div><p id="kbCount" role="status" aria-live="polite"></p><div id="kbResults" class="kb-grid kb-list"></div><div id="kbReferences" class="card" style="margin-top:16px"></div></section>
+<p class="ft" style="margin-top:20px"><b>Library review:</b> 29 October 2026. Curated local summaries, not a live AI service or an automatically updating guideline feed. Uploaded Ch. 430 excerpts informed the library; original scans are not published.</p>
+<p class="ft" style="margin-top:20px"><b>Sources:</b> Harrison's Principles of Internal Medicine, Ch. 16 Headache (Goadsby); ICHD-3 (Cephalalgia 2018); AHS position statement, CGRP-targeting therapies as a first-line option for migraine prevention (Headache, Mar 2024); AHS consensus statement 2021 (acute and preventive therapy). Doses are typical adult doses; verify against current labels, local formulary and patient factors. Pregnancy, renal/hepatic disease and drug interactions require individual clinical review.</p>
 </main>
+<script src="knowledge-base.js"></script>
 <script>
-const RF=[["sudden","Sudden-onset (thunderclap) headache"],["first","First severe headache / \"worst\" headache ever"],["vomit","Vomiting that precedes the headache"],["subacute","Subacute worsening over days or weeks"],["valsalva","Pain induced by bending, lifting, coughing"],["sleep","Disturbs sleep or present immediately on awakening"],["syst","Known systemic illness (e.g. malignancy, HIV, immunosuppression)"],["age55","Onset after age 55"],["fever","Fever, neck stiffness or unexplained systemic signs"],["neuro","Abnormal neurological examination / papilledema"],["temp","Temporal artery tenderness, jaw claudication, polymyalgia, visual loss"],["eye","Red eye with fixed mid-dilated pupil, halos, eye pain"]];
+const RF=[["preg","New headache during pregnancy or postpartum"],["sudden","Sudden-onset (thunderclap) headache"],["first","First severe headache / \"worst\" headache ever"],["vomit","Vomiting that precedes the headache"],["subacute","Subacute worsening over days or weeks"],["valsalva","Pain induced by bending, lifting, coughing"],["sleep","Disturbs sleep or present immediately on awakening"],["syst","Known systemic illness (e.g. malignancy, HIV, immunosuppression)"],["age55","New onset after age 50"],["fever","Fever, neck stiffness or unexplained systemic signs"],["neuro","Abnormal neurological examination / papilledema"],["temp","Temporal artery tenderness, jaw claudication, polymyalgia, visual loss"],["eye","Red eye with fixed mid-dilated pupil, halos, eye pain"]];
 const FT=[["uni","Unilateral location"],["puls","Pulsating / throbbing quality"],["sev","Moderate-severe intensity"],["act","Aggravated by routine activity"],["nau","Nausea or vomiting"],["pp","Photophobia and phonophobia"],["aura","Aura (visual / sensory / speech, reversible)"],["bil","Bilateral, pressing / tightening quality"],["mild","Mild-moderate, not worsened by activity"],["auto","Cranial autonomic features (tearing, red eye, nasal congestion, ptosis)"],["rest","Restlessness / agitation during attacks, orbital/temporal pain"],["orth","Positional: starts upright, resolves lying down"],["morn","Worst on waking / recumbency, with transient visual obscurations"],["abrupt","Daily from a remembered onset date (abrupt onset)"]];
-const CX=[["cvd","Known coronary / cerebrovascular disease, uncontrolled hypertension or Raynaud's"],["lp","Recent lumbar puncture, epidural, or strenuous Valsalva event"],["ob","Obesity / young woman with weight gain (IIH risk)"],["trauma","Recent head injury or viral illness before onset"],["cep","Women of childbearing potential"]];
+const CX=[["cvd","Known coronary / cerebrovascular disease, uncontrolled hypertension or Raynaud's"],["lp","Recent lumbar puncture, epidural, or strenuous Valsalva event"],["ob","Obesity / young woman with weight gain (IIH risk)"],["trauma","Recent head injury or viral illness before onset"],["cep","Potential for pregnancy (review reproductive safety)"]];
 const mk=(a,id)=>document.getElementById(id).innerHTML=a.map(([k,t])=>`<label class="o"><input type="checkbox" id="${k}"><span>${t}</span></label>`).join("");
 mk(RF,"rf");mk(FT,"ft");mk(CX,"cx");
 const $=i=>document.getElementById(i),c=i=>$(i).checked;
 function go(n){[1,2,3].forEach(i=>{$("s"+i).classList.toggle("hid",i!=n);$("t"+i).classList.toggle("on",i==n)});scrollTo(0,0)}
-function reset(){document.querySelectorAll("input[type=checkbox]").forEach(x=>x.checked=false);go(1)}
+function reset(){document.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);for(const [id,v] of Object.entries({days:4,an:2,tr:0,age:35,months:1,migdays:0})){$(id).value=v;$(id).setCustomValidity('');}$('dur').value='m';$('out').textContent='';go(1)}
 const L=a=>"<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
 function calc(){
+ const fields=[['days',0,31],['an',0,31],['tr',0,31],['age',18,120],['months',0,1200],['migdays',0,31]];
+ for(const [id,min,max] of fields){const el=$(id),v=Number(el.value);if(el.value.trim()===''||!Number.isFinite(v)||!Number.isInteger(v)||v<min||v>max){el.setCustomValidity(`Enter a whole number from ${min} to ${max}.`);el.reportValidity();el.focus();return;}el.setCustomValidity('');}
+ if(+$('migdays').value>+$('days').value){$('migdays').setCustomValidity('Migraine days cannot exceed headache days.');$('migdays').reportValidity();return;}
+ const months=+$('months').value, migdays=+$('migdays').value;
  const days=+$("days").value||0,an=+$("an").value||0,tr=+$("tr").value||0,age=+$("age").value||0,dur=$("dur").value;
  const flags=RF.filter(([k])=>c(k)).map(x=>x[1]);
  let h="",dx=[];
@@ -75,38 +90,42 @@ function calc(){
   h+=`<div class="card"><h2>Red flags present (${flags.length})</h2><div class="al red"><b>Secondary headache must be excluded before labelling as primary.</b></div>${L(flags)}<h3>Suggested work-up</h3>`;
   const w=[];
   if(c("sudden")||c("first"))w.push("Subarachnoid haemorrhage: urgent non-contrast CT head; if CT is normal and suspicion remains, lumbar puncture (xanthochromia). Consider CTA.");
-  if(c("fever"))w.push("Meningitis / encephalitis: LP is mandatory unless contraindicated; blood cultures and empirical antibiotics without delay if bacterial meningitis suspected.");
-  if(c("temp")||(age>=50&&c("age55")))w.push("Giant cell arteritis: ESR/CRP now; start prednisone (Harrison: 80 mg daily for 4-6 weeks) without waiting for temporal artery biopsy; urgent ophthalmology if visual symptoms.");
+  if(c("fever"))w.push("Meningitis / encephalitis: urgent hospital assessment; blood cultures and empirical antibiotics without delay when indicated. LP only after assessing contraindications; do not delay treatment for testing.");
+  if(c("temp")||(age>=50&&c("age55")))w.push("Giant cell arteritis: ESR/CRP now; urgent specialist-directed glucocorticoid treatment without waiting for confirmatory tests when strongly suspected; emergency ophthalmology for visual symptoms.");
   if(c("eye"))w.push("Acute angle-closure glaucoma: urgent ophthalmology, intraocular pressure measurement.");
   if(c("neuro")||c("subacute")||c("valsalva")||c("sleep")||c("vomit")||c("syst"))w.push("Mass lesion / raised ICP / venous sinus thrombosis: MRI brain with contrast (+ MR venogram); fundoscopy; LP with opening pressure only after imaging.");
   if(!w.length)w.push("CT or MRI brain; consider LP if imaging is unrevealing.");
   h+=L(w)+"</div>";
+ }
+ if(flags.length){
+ h+='<div class="card"><h2>Priority: investigate secondary headache</h2><p>Primary-headache classification and drug suggestions are withheld while red flags remain unresolved. Sudden severe pain, neurological deficit, fever/meningism, visual loss or new severe pregnancy/postpartum headache needs emergency assessment. Other red flags require prompt clinical evaluation.</p></div>';
+ $('out').innerHTML=h;go(3);return;
  }
  // classification
  const m1=[c("uni"),c("puls"),c("sev"),c("act")].filter(Boolean).length,
   m2=c("nau")||c("pp"),mig=m1>=2&&m2,
   tt=([c("bil"),c("mild")].filter(Boolean).length==2)&&!c("nau"),
   clu=dur=="s"&&c("uni")&&c("auto")&&(c("rest")||c("sev"));
- const moh=days>=15&&(an>=15||tr>=10);
+ const moh=days>=15&&months>3&&(an>=15||tr>=10);
  if(clu)dx.push("Trigeminal autonomic cephalalgia (probable cluster headache)");
- if(mig)dx.push(days>=15?"Chronic migraine (≥15 headache days/month)":"Migraine"+(c("aura")?" with aura":" without aura"));
- if(tt&&!mig)dx.push(days>=15?"Chronic tension-type headache":"Tension-type headache");
+ if(mig&&dur=="m")dx.push(days>=15&&months>3&&migdays>=8?"Possible chronic migraine — confirm established history and ≥8 migraine days/month":"Migraine"+(c("aura")?" with aura":" without aura"));
+ if(tt&&!mig)dx.push(days>=15&&months>3?"Possible chronic tension-type headache":"Tension-type headache");
  if(c("orth"))dx.push("Low CSF volume (orthostatic) headache"+(c("lp")?" — post-LP/post-procedure likely":" — consider spontaneous leak / POTS"));
  if(c("morn"))dx.push("Raised CSF pressure headache — idiopathic intracranial hypertension"+(c("ob")?" (risk profile fits)":"")+" vs mass/venous obstruction/sleep apnoea");
- if(c("abrupt")&&days>=15)dx.push("New daily persistent headache (exclude SAH, low/high CSF pressure, chronic meningitis, post-traumatic)");
+ if(c("abrupt")&&days>=15)dx.push("Possible new daily persistent headache — confirm continuous pain within 24 h of onset for >3 months and exclude secondary causes");
  if(c("trauma")&&!dx.length)dx.push("Post-traumatic or post-infectious headache");
  if(moh)dx.push("Medication-overuse headache (probable)");
  if(days>=15&&!dx.length)dx.push("Chronic daily headache, unclassified — diagnose the underlying headache type first");
- if(!dx.length)dx.push("Unclassified — features do not meet criteria; revisit history, consider tension-type or secondary causes");
- h+=`<div class="card"><h2>Probable diagnosis</h2>${dx.map(d=>`<div class="al ${flags.length?"amb":"grn"}">${d}</div>`).join("")}${flags.length?'<p class="ft">Provisional until red flags are excluded.</p>':""}<p class="ft">${days>=15?"Chronic daily headache (≥15 days/month): primary or secondary; medication overuse commonly coexists (Harrison Table 16-3).":"Frequency: "+days+" days/month."}${age>55?" Onset/age >55 raises concern for secondary causes.":""}</p></div>`;
+ if(!dx.length)dx.push("Unclassified — revisit history and examine for secondary causes");
+ h+=`<div class="card"><h2>Probable diagnosis</h2>${dx.map(d=>`<div class="al ${flags.length?"amb":"grn"}">${d}</div>`).join("")}${flags.length?'<p class="ft">Provisional until red flags are excluded.</p>':""}<p class="ft">${days>=15?"Chronic daily headache (≥15 days/month): primary or secondary; medication overuse commonly coexists (Harrison Table 16-3).":"Frequency: "+days+" days/month."}${age>50?" Ask specifically about new onset after 50; age alone is not an onset date.":""}</p></div>`;
  // treatment
  let t="",cv=c("cvd");
- const cvw=cv?'<div class="al red">Cardiovascular disease/uncontrolled hypertension: <b>avoid triptans and ergots</b> (vasoconstriction). Prefer gepants (ubrogepant, rimegepant, atogepant) or lasmiditan. Erenumab can raise blood pressure — monitor; prefer propranolol/candesartan where suitable.</div>':"";
+ const cvw=cv?'<div class="al red">Cardiovascular disease/uncontrolled hypertension: <b>avoid triptans and ergots</b> (vasoconstriction). Consider an acute gepant (ubrogepant or rimegepant) after individual assessment; atogepant is preventive-only. Lasmiditan has CNS/driving cautions. Review BP, vascular risk and interactions for all options.</div>':"";
  const has=s=>dx.some(d=>d.includes(s));
  if(has("igraine")){
   t+=`<h3>Migraine — acute</h3>`+L(["Mild-moderate: NSAID (ibuprofen 400-600 mg, naproxen 500-550 mg), aspirin 900-1000 mg, acetaminophen, or aspirin+acetaminophen+caffeine; add metoclopramide 10 mg for nausea.","Moderate-severe or NSAID failure: "+(cv?"gepant (ubrogepant 50-100 mg, rimegepant 75 mg) or lasmiditan.":"triptan (e.g. sumatriptan 50-100 mg, rizatriptan 10 mg) early in the attack, with NSAID; or gepant / lasmiditan if triptans fail or are contraindicated."),"Avoid opioids and butalbital; limit acute treatment to &lt;10 days/month (triptans/combinations) and &lt;15 days (simple analgesics) to prevent medication overuse."])+cvw;
   const need=days>=4||(days>=2&&c("sev"))||tr>=8;
-  t+=`<h3>Migraine — prevention ${need?'<span class="tag">indicated</span>':'<span class="tag">consider</span>'}</h3>`+L(["Consider when ≥4 days/month, or ≥2 days with severe disability, or acute therapy failing/overused.","<b>AHS 2024:</b> CGRP-targeting therapies (erenumab, fremanezumab, galcanezumab, eptinezumab; gepants rimegepant, atogepant) are a first-line option and need not follow failure of older preventives.","Traditional options: propranolol, candesartan, topiramate, amitriptyline/nortriptyline (Harrison: up to 1 mg/kg, taken in the evening), valproate"+(c("cep")?" — <b>avoid in women of childbearing potential</b>.":"."),"Chronic migraine: onabotulinumtoxinA, topiramate, or CGRP therapy. Neuromodulation (non-invasive vagal / single-pulse TMS) for refractory cases.","Assess response after ~2-3 months; keep a headache diary."]);
+  t+=`<h3>Migraine — prevention ${need?'<span class="tag">indicated</span>':'<span class="tag">consider</span>'}</h3>`+L(["Consider when ≥4 days/month, or ≥2 days with severe disability, or acute therapy failing/overused.","<b>AHS 2024:</b> CGRP-targeting therapies (erenumab, fremanezumab, galcanezumab, eptinezumab; gepants rimegepant, atogepant) are a first-line option and need not follow failure of older preventives.","Traditional options: propranolol, candesartan, topiramate, amitriptyline/nortriptyline with low-dose initiation and supervised titration. Topiramate is contraindicated for migraine prevention in pregnancy and requires reproductive safety review. Valproate is not a routine option in people who could become pregnant"+(c("cep")?" — <b>avoid in women of childbearing potential</b>.":"."),"Chronic migraine: onabotulinumtoxinA, topiramate, or CGRP therapy. Neuromodulation (non-invasive vagal / single-pulse TMS) for refractory cases.","Assess response after ~2-3 months; keep a headache diary."]);
  }
  if(has("cluster")||has("autonomic")){
   t+=`<h3>Cluster headache / TAC</h3>`+L(["Acute: 100% oxygen 12-15 L/min via non-rebreather for 15 min; sumatriptan 6 mg SC or zolmitriptan nasal"+(cv?" (triptans contraindicated with CVD — oxygen first)":"")+".","Transition: prednisone short course. Preventive: verapamil (ECG before and with each dose escalation — PR prolongation/AV block); galcanezumab for episodic cluster; lithium as alternative.","Indomethacin trial if paroxysmal hemicrania / hemicrania continua suspected (absolute response). Consider MRI pituitary/brain."]);
@@ -114,22 +133,18 @@ function calc(){
  if(has("ension")){
   t+=`<h3>Tension-type headache</h3>`+L(["Acute: simple analgesic or NSAID, limit to &lt;15 days/month.","Chronic/frequent: amitriptyline 10-25 mg nocte, titrate; address sleep, stress, depression/anxiety comorbidity, posture, physiotherapy, relaxation/CBT."]);
  }
- if(has("Low CSF")){
-  t+=`<h3>Low CSF volume headache</h3>`+L(["Bed rest, hydration, caffeine. Persistent: IV caffeine 500 mg in 500 mL saline over 2 h (ECG first for arrhythmia).","If it fails: abdominal binder, then epidural autologous blood patch (empirically at the LP site for post-LP headache). MRI with gadolinium (diffuse meningeal enhancement) and spinal imaging to find the leak; consider POTS."]);
- }
+ if(has("Low CSF"))t+='<h3>Orthostatic headache / suspected CSF leak</h3><p>Confirm the cause; consider appropriate brain/spine imaging and specialist assessment. Conservative measures may provide temporary relief. Persistent post-dural-puncture symptoms may need an epidural blood patch. No automated IV caffeine regimen is supplied.</p>';
  if(has("Raised CSF")){
-  t+=`<h3>Raised CSF pressure / IIH</h3>`+L(["MRI + MR venogram, formal visual field testing, then LP with opening pressure (20-30 mL CSF removal can be diagnostic).","Acetazolamide 250-500 mg bid; topiramate is next choice; weight loss; shunting/optic nerve sheath fenestration if vision threatened. Screen for sleep apnoea and uncontrolled hypertension."]);
+  t+=`<h3>Raised CSF pressure / IIH</h3>`+L(["MRI + MR venogram, formal visual field testing, then LP with opening pressure only when safe and clinically indicated. Do not use routine CSF drainage as a diagnostic instruction.","Acetazolamide 250-500 mg bid; topiramate is next choice; weight loss; shunting/optic nerve sheath fenestration if vision threatened. Screen for sleep apnoea and uncontrolled hypertension."]);
  }
- if(has("Medication-overuse")){
-  t+=`<h3>Medication-overuse headache</h3>`+L(["Explain the problem; use a diary. Start a preventive at the same time as analgesic reduction (preventives may not work with continued overuse, especially opioids).","Outpatient: reduce by ~10% every 1-2 weeks, or stop; naproxen 500 mg bid as a bridge. Inpatient detox for opioids/barbiturates or significant comorbidity: withdraw drug, antiemetics, IV fluids, clonidine for opioid withdrawal, DHE 8-hourly x5 days with antiemetic cover (contraindicated in CVD)."])+(cv?cvw:"");
- }
+ if(has("Medication-overuse"))t+='<h3>Possible medication-overuse headache</h3><p>Confirm drug-specific overuse for >3 months. Plan withdrawal, preventive therapy and close support. Simple analgesics/triptans are often stopped abruptly; opioids/barbiturates require individualized supervised withdrawal. Do not automatically prescribe a bridging analgesic.</p>';
  if(has("New daily")){
-  t+=`<h3>New daily persistent headache</h3>`+L(["First exclude secondary causes (SAH, CSF pressure disorders, chronic meningitis, post-traumatic).","Treatment is empirical and phenotype-directed: tricyclics, topiramate, valproate, candesartan or gabapentin; may resolve within 3-5 years."]);
+  t+=`<h3>New daily persistent headache</h3>`+L(["First exclude secondary causes (SAH, CSF pressure disorders, chronic meningitis, post-traumatic).","Treatment is empirical and phenotype-directed: tricyclics, topiramate, valproate, candesartan or gabapentin; prognosis varies; refer for persistent symptoms."]);
  }
  if(has("ost-traumatic")){t+=`<h3>Post-traumatic / post-infectious</h3>`+L(["Normal neuro exam and imaging typical; exclude chronic subdural haematoma, carotid dissection. Treat per migraine/tension phenotype."]);}
  if(!t&&!flags.length)t="<p>No specific regimen suggested. Reassess the history.</p>";
  if(t||flags.length)h+=`<div class="card"><h2>Management</h2>${flags.length?'<p class="ft">Definitive treatment awaits exclusion of secondary causes; symptomatic therapy below applies once it is safe.</p>':""}${t}</div>`;
- h+=`<div class="card"><h2>Follow-up & referral</h2>`+L(["Review response, diary and analgesic use at 8-12 weeks.","Refer if diagnosis unclear, primary headache other than migraine/tension-type, or unresponsive to two or more standard therapies (Harrison). >90% of primary-care headache presenters have migraine."])+`</div>`;
+ h+=`<div class="card"><h2>Follow-up & referral</h2>`+L(["Review response, diary and analgesic use at 8-12 weeks.","Refer if diagnosis unclear, primary headache other than migraine/tension-type, or unresponsive to two or more standard therapies (Harrison). Review sooner for deterioration or any new red flag."])+`</div>`;
  $("out").innerHTML=h;go(3);
 }
-</script></body></html>
+</script><script src="library.js"></script></body></html>
